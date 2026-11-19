@@ -1,0 +1,32 @@
+# ----------------------------------------------------------------------
+# Costplay Wonderland Apache Server Configuration
+# ----------------------------------------------------------------------
+
+# Enable Rewrite Engine
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Prevent direct directory browsing
+    Options -Indexes
+
+    # Custom Error Pages
+    ErrorDocument 404 /404.php
+
+    # Protect sensitive directories and files
+    RewriteRule ^(\.git|\.env|database) - [F,L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Prevent viewing of sensitive file types
+<FilesMatch "(^\.|\.(bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist)|~)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
